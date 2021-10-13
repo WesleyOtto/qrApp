@@ -7,6 +7,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+    <ion-button (click)="detectOrientation()"> Detectar mudanças de Orientação</ion-button>
+
     <div class="leitor">
         <div class="imagem" (click)="lerQrCode()">
             <img src="assets/qr.gif" alt="">

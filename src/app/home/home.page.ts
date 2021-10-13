@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { AlertController, Platform } from '@ionic/angular';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 @Component({
   selector: 'app-home',
@@ -14,10 +15,13 @@ export class HomePage {
   IMG: HTMLElement;
   resultado = '';
 
+  currentOrientation: string = '';
+
   constructor(
     private qrScanner: QRScanner,
     public alertController: AlertController,
-    private platform: Platform
+    private platform: Platform, 
+    private screenOrientation: ScreenOrientation
   ) { 
     this.platform.backButton.subscribeWithPriority(0, () => {
       this.content.style.opacity = '1';
@@ -27,6 +31,17 @@ export class HomePage {
     });
   }
 
+  detectOrientation(){
+    // detect orientation changes
+    this.screenOrientation.onChange().subscribe(
+      () => {
+        
+        this.exibirAlerta2(this.screenOrientation.type);
+        
+      }
+    );
+  }
+  
   lerQrCode() {
     this.content = document.getElementsByTagName('ion-content')[0];
 
@@ -70,6 +85,15 @@ export class HomePage {
 
     await alert.present();
 
+  }
+
+  async exibirAlerta2(mensagem:string) {
+    const alert = await this.alertController.create({
+      header: 'Mudança de Orientação',
+      message: mensagem,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
 
 }
